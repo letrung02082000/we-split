@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WeSplit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="We Split" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="47*"/>
+            <ColumnDefinition Width="349*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            
+        </Grid>
+        <Grid Grid.Column="1">
+
+        </Grid>
     </Grid>
 </Window>
