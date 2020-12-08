@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using ModelLibrary;
+
+namespace WeSplit
+{
+    /// <summary>
+    /// Interaction logic for DestinationScreen.xaml
+    /// </summary>
+    public partial class DestinationScreen : UserControl
+    {
+        public ObservableCollection<DestinationModel> destinations;
+        public DestinationScreen()
+        {
+            InitializeComponent();
+        }
+
+        private void DestinationScreen_Loaded(object sender, RoutedEventArgs e)
+        {
+            destinations = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadDestination());
+            DestinationListView.ItemsSource = destinations;
+        }
+    }
+}
