@@ -23,13 +23,25 @@ namespace WeSplit
     public partial class DestinationScreen : UserControl
     {
         public ObservableCollection<DestinationModel> destinations;
+        public ObservableCollection<string> Province = new ObservableCollection<string>() { "Gia Lai", "TP.HCM", "Hà Nội" };
         public DestinationScreen()
         {
             InitializeComponent();
+            
         }
 
         private void DestinationScreen_Loaded(object sender, RoutedEventArgs e)
         {
+            destinations = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadDestination());
+            DestinationListView.ItemsSource = destinations;
+            ProvinceComboBox.ItemsSource = Province;
+        }
+
+        private void AddDestinationBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DestinationModel destination = new DestinationModel { DesName = NameTextBox.Text, Province = ProvinceComboBox.Text };
+            var output = DatabaseAccess.SaveDestination(destination);
+
             destinations = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadDestination());
             DestinationListView.ItemsSource = destinations;
         }

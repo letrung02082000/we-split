@@ -12,6 +12,15 @@ namespace ModelLibrary
 {
     public class DatabaseAccess
     {
+        public static string GetLastInsertRowId(string table)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Query<string>($"SELECT DISTINCT last_insert_rowid() FROM {table}");
+                return output.ToList().First();
+            }
+        }
+
         //CRUD Member
         public static List<MemberModel> LoadMember()
         {
@@ -48,11 +57,12 @@ namespace ModelLibrary
             }
         }
 
-        public static void SaveDestination(DestinationModel destination)
+        public static int SaveDestination(DestinationModel destination)
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
                 var output = connection.Execute("INSERT INTO destination(desName, province) VALUES(@DesName, @Province)", destination);
+                return output;
             }
         }
 

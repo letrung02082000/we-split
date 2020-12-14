@@ -13,6 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="Segoe UI"
+      Loaded="AddJourneyPage_Loaded"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddJourneyPage">
     <Grid>
@@ -36,17 +37,30 @@
                     <RowDefinition Height="31*"/>
                     <RowDefinition Height="41*"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="JourneyNameTextBox"/>
+                <TextBox Grid.Row="0" x:Name="JourneyNameTextBox" materialDesign:HintAssist.Hint="Tên chuyến đi"/>
                 <DockPanel Grid.Row="1">
                     <Button x:Name="AddDestinationBtn" Content="Thêm địa danh" DockPanel.Dock="Bottom" Click="AddDestinationBtn_Click"/>
-                    <ListView/>
+                    <ListView x:Name="DestinationListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DesName}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </DockPanel>
                 <DockPanel LastChildFill="True" Grid.Row="2">
                     <Button x:Name="AddCoverImageBtn" DockPanel.Dock="Bottom" Content="Thêm ảnh bìa" Click="AddCoverImageBtn_Click"/>
-                    <Image/>
+                    <Image x:Name="JourneyCoverImage"/>
                 </DockPanel>
                 <DockPanel LastChildFill="True" Grid.Row="3">
-                    <Button Content="Thêm thành viên" Name="AddMemberBtn" Click="AddMemberBtn_Click"/>
+                    <Button Content="Thêm thành viên" Name="AddMemberBtn" Click="AddMemberBtn_Click" DockPanel.Dock="Bottom"/>
+                    <ListView x:Name="MemberListView">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding MemberName}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </DockPanel>
             </Grid>
             <Grid Grid.Column="1">
@@ -54,14 +68,29 @@
                     <RowDefinition Height="35*"/>
                     <RowDefinition Height="171*"/>
                 </Grid.RowDefinitions>
-                <StackPanel>
+                <StackPanel Grid.Row="0">
                     <DockPanel LastChildFill="True">
-                        <TextBox DockPanel.Dock="Right" Width="50" materialDesign:HintAssist.Hint="Số tiền"/>
-                        <ComboBox DockPanel.Dock="Right" Width="100"/>
-                        <TextBox materialDesign:HintAssist.Hint="Khoản chi"/>
+                        <TextBox x:Name="paymentValueTextBox" DockPanel.Dock="Right" Width="50" materialDesign:HintAssist.Hint="Số tiền"/>
+                        <ComboBox x:Name="MemberComboBox" DockPanel.Dock="Right" Width="100">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MemberName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBox x:Name="paymentContentTextBox" materialDesign:HintAssist.Hint="Khoản chi"/>
                     </DockPanel>
-                    <Button Content="Thêm khoản chi" DockPanel.Dock="Bottom"/>
+                    <Button x:Name="AddPaymentBtn" Click="AddPaymentBtn_Click" Content="Thêm khoản chi" DockPanel.Dock="Bottom"/>
                 </StackPanel>
+                <ListView x:Name="PaymentListView" Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Khoản chi" DisplayMemberBinding="{Binding PaymentContent}"/>
+                            <GridViewColumn Header="Người chi" DisplayMemberBinding="{Binding MemberName}"/>
+                            <GridViewColumn Header="Số tiền" DisplayMemberBinding="{Binding PaymentValue}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Grid>
         </Grid>
     </Grid>

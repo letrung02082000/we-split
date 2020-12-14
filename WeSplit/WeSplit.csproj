@@ -132,6 +132,7 @@
     <Compile Include="DetailJourneyPage.xaml.cs">
       <DependentUpon>DetailJourneyPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DirectoryConverter.cs" />
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>

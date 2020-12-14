@@ -15,19 +15,15 @@
         FontFamily="Segoe UI"
         Loaded="AddDestinationWindow_Loaded"
         Title="AddDestinationWindow" Height="450" Width="800">
-    <DockPanel>
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <Button Content="Thêm"/>
-            <Button Content="Huỷ"/>
-        </StackPanel>
-        <Grid>
+
+    <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="241*"/>
                 <ColumnDefinition Width="155*"/>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0">
                 <Label Content="Địa danh cũ" DockPanel.Dock="Top"/>
-                <ListView x:Name="DestinationListView">
+                <ListView x:Name="DestinationListView" MouseDoubleClick="DestinationListView_MouseDoubleClick">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Tên địa danh" DisplayMemberBinding="{Binding DesName}"/>
@@ -36,12 +32,17 @@
                     </ListView.View>
                 </ListView>
             </DockPanel>
-            <StackPanel Grid.Column="1">
+            <DockPanel Grid.Column="1">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <Button Content="Thêm" Name="ConfirmBtn" Click="ConfirmBtn_Click"/>
+                    <Button Content="Huỷ" Name="CancelBtn" Click="CancelBtn_Click"/>
+                </StackPanel>
+            <StackPanel>
                 <Label Content="Tên địa danh"/>
-                <TextBox/>
+                <TextBox x:Name="DesNameTextBox"/>
                 <Label Content="Tỉnh thành"/>
-                <TextBox/>
+                <ComboBox x:Name="ProvinceComboBox"/>
             </StackPanel>
+            </DockPanel>
         </Grid>
-    </DockPanel>
 </Window>

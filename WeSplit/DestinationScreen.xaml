@@ -30,10 +30,10 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Column="1">
-            <TextBox materialDesign:HintAssist.Hint="Tên địa danh"/>
+            <TextBox x:Name="NameTextBox" materialDesign:HintAssist.Hint="Tên địa danh"/>
             <TextBlock>Tỉnh thành</TextBlock>
-            <ComboBox/>
-            <Button Content="Thêm địa danh"/>
+            <ComboBox x:Name="ProvinceComboBox" IsEditable="True"/>
+            <Button Content="Thêm địa danh" x:Name="AddDestinationBtn" Click="AddDestinationBtn_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

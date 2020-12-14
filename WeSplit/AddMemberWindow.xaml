@@ -15,19 +15,15 @@
         FontFamily="Segoe UI"
         Loaded="AddMemberWindow_Loaded"
         Title="AddMemberWindow" Height="450" Width="800">
-    <DockPanel LastChildFill="True">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="30" DockPanel.Dock="Bottom">
-            <Button Content="Thêm"/>
-            <Button Content="Hủy"/>
-        </StackPanel>
-        <Grid>
+
+    <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="199*"/>
                 <ColumnDefinition Width="197*"/>
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0" LastChildFill="True">
                 <Label Content="Thành viên cũ" DockPanel.Dock="Top"/>
-                <ListView x:Name="MemberListView">
+                <ListView x:Name="MemberListView" MouseDoubleClick="MemberListView_MouseDoubleClick">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Tên thành viên" DisplayMemberBinding="{Binding MemberName}"/>
@@ -38,13 +34,16 @@
                 </ListView>
             </DockPanel>
             <DockPanel LastChildFill="True" Grid.Column="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="30" DockPanel.Dock="Bottom">
+                    <Button Content="Thêm" Name="AddMemberBtn" Click="AddMemberBtn_Click"/>
+                    <Button Content="Hủy" Name="CancelBtn" Click="CancelBtn_Click"/>
+                </StackPanel>
                 <Label DockPanel.Dock="Top" Content="Thành viên mới"/>
                 <StackPanel>
-                    <TextBox materialDesign:HintAssist.Hint="Tên thành viên"/>
-                    <TextBox materialDesign:HintAssist.Hint="Số điện thoại"/>
-                    <TextBox materialDesign:HintAssist.Hint="Địa chỉ"/>
+                    <TextBox materialDesign:HintAssist.Hint="Tên thành viên" x:Name="NameTextBox"/>
+                    <TextBox materialDesign:HintAssist.Hint="Số điện thoại" x:Name="TelTextBox"/>
+                    <TextBox materialDesign:HintAssist.Hint="Địa chỉ" x:Name="AddrTextBox"/>
                 </StackPanel>
             </DockPanel>
         </Grid>
-    </DockPanel>
 </Window>

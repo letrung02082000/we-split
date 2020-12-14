@@ -21,6 +21,8 @@ namespace WeSplit
     /// </summary>
     public partial class AddMemberWindow : Window
     {
+        public delegate void AddMember(MemberModel member);
+        public event AddMember EventHandler;
         public ObservableCollection<MemberModel> MemberList;
         public AddMemberWindow()
         {
@@ -31,6 +33,31 @@ namespace WeSplit
         {
             MemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadMember());
             MemberListView.ItemsSource = MemberList;
+        }
+
+        private void MemberListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MemberModel member = MemberList[MemberListView.SelectedIndex];
+            if (EventHandler != null)
+            {
+                EventHandler(member);
+                this.Close();
+            }
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void AddMemberBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (EventHandler != null)
+            {
+                MemberModel member = new MemberModel { MemberName = NameTextBox.Text, MemberTel = TelTextBox.Text, MemberAddr = AddrTextBox.Text };
+                EventHandler(member);
+                this.Close();
+            }
         }
     }
 }
