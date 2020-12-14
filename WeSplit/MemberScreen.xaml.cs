@@ -22,7 +22,7 @@ namespace WeSplit
     /// </summary>
     public partial class MemberScreen : UserControl
     {
-        ObservableCollection<MemberModel> memberList;
+        public ObservableCollection<MemberModel> memberList;
         public MemberScreen()
         {
             InitializeComponent();

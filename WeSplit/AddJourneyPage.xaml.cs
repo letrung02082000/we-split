@@ -41,5 +41,16 @@ namespace WeSplit
             if (this.NavigationService.CanGoBack)
                 this.NavigationService.GoBack();
         }
+
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddDestinationBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddDestinationWindow addDestinationWindow = new AddDestinationWindow();
+            addDestinationWindow.Show();
+        }
     }
 }

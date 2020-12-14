@@ -137,6 +137,14 @@ namespace ModelLibrary
             }
         }
 
+        public static void SaveRoute(RouteModel route)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Execute("INSERT INTO route(journeyId, routeContent) VALUES (@JourneyId, @RouteContent)", route);
+            }
+        }
+
         private static string LoadConnectionString(string id = "default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;

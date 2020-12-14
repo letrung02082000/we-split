@@ -93,7 +93,7 @@ namespace WeSplit
 
         private void AddPaymentBtn_Click(object sender, RoutedEventArgs e)
         {
-            AddPaymentWindow addPaymentWindow = new AddPaymentWindow();
+            AddPaymentWindow addPaymentWindow = new AddPaymentWindow(JourneyInfo);
             addPaymentWindow.Show();
         }
 

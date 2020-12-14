@@ -17,20 +17,20 @@ using System.Windows.Shapes;
 namespace WeSplit
 {
     /// <summary>
-    /// Interaction logic for AddMemberWindow.xaml
+    /// Interaction logic for AddDestinationWindow.xaml
     /// </summary>
-    public partial class AddMemberWindow : Window
+    public partial class AddDestinationWindow : Window
     {
-        public ObservableCollection<MemberModel> MemberList;
-        public AddMemberWindow()
+        public ObservableCollection<DestinationModel> DestinationList { get; set; }
+        public AddDestinationWindow()
         {
             InitializeComponent();
         }
 
-        private void AddMemberWindow_Loaded(object sender, RoutedEventArgs e)
+        private void AddDestinationWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadMember());
-            MemberListView.ItemsSource = MemberList;
+            DestinationList = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadDestination());
+            DestinationListView.ItemsSource = DestinationList;
         }
     }
 }

@@ -13,6 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="Segoe UI"
+        Loaded="AddMemberWindow_Loaded"
         Title="AddMemberWindow" Height="450" Width="800">
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="30" DockPanel.Dock="Bottom">
@@ -26,7 +27,15 @@
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0" LastChildFill="True">
                 <Label Content="Thành viên cũ" DockPanel.Dock="Top"/>
-                <ComboBox/>
+                <ListView x:Name="MemberListView">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Tên thành viên" DisplayMemberBinding="{Binding MemberName}"/>
+                            <GridViewColumn Header="Số điện thoại" DisplayMemberBinding="{Binding MemberTel}"/>
+                            <GridViewColumn Header="Địa chỉ" DisplayMemberBinding="{Binding MemberAddr}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </DockPanel>
             <DockPanel LastChildFill="True" Grid.Column="1">
                 <Label DockPanel.Dock="Top" Content="Thành viên mới"/>

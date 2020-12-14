@@ -1,0 +1,47 @@
+﻿<Window x:Class="WeSplit.AddDestinationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeSplit"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="Segoe UI"
+        Loaded="AddDestinationWindow_Loaded"
+        Title="AddDestinationWindow" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <Button Content="Thêm"/>
+            <Button Content="Huỷ"/>
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="241*"/>
+                <ColumnDefinition Width="155*"/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="0">
+                <Label Content="Địa danh cũ" DockPanel.Dock="Top"/>
+                <ListView x:Name="DestinationListView">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Tên địa danh" DisplayMemberBinding="{Binding DesName}"/>
+                            <GridViewColumn Header="Tỉnh thành" DisplayMemberBinding="{Binding Province}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+            <StackPanel Grid.Column="1">
+                <Label Content="Tên địa danh"/>
+                <TextBox/>
+                <Label Content="Tỉnh thành"/>
+                <TextBox/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
