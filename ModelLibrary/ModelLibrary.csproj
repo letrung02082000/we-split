@@ -56,6 +56,7 @@
     <Compile Include="JourneyModel.cs" />
     <Compile Include="MemberModel.cs" />
     <Compile Include="PaymentModel.cs" />
+    <Compile Include="PaymentPerMemberModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteModel.cs" />
   </ItemGroup>

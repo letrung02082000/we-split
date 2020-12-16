@@ -65,32 +65,64 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35*"/>
-                    <RowDefinition Height="171*"/>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="56*"/>
+                    <RowDefinition Height="135*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
-                    <DockPanel LastChildFill="True">
-                        <TextBox x:Name="paymentValueTextBox" DockPanel.Dock="Right" Width="50" materialDesign:HintAssist.Hint="Số tiền"/>
-                        <ComboBox x:Name="MemberComboBox" DockPanel.Dock="Right" Width="100">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding MemberName}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBox x:Name="paymentContentTextBox" materialDesign:HintAssist.Hint="Khoản chi"/>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="127*"/>
+                        <ColumnDefinition Width="150*"/>
+                    </Grid.ColumnDefinitions>
+                    <DockPanel Grid.Column="0">
+                        <Label Content="Ngày đi" DockPanel.Dock="Left"/>
+                        <DatePicker Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    Name="DatePicker1"
+                                    VerticalAlignment="Top"
+                                    Width="200"
+                                    FirstDayOfWeek="Monday"
+                                    SelectedDateFormat="Short"
+                                    />
                     </DockPanel>
-                    <Button x:Name="AddPaymentBtn" Click="AddPaymentBtn_Click" Content="Thêm khoản chi" DockPanel.Dock="Bottom"/>
-                </StackPanel>
-                <ListView x:Name="PaymentListView" Grid.Row="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Khoản chi" DisplayMemberBinding="{Binding PaymentContent}"/>
-                            <GridViewColumn Header="Người chi" DisplayMemberBinding="{Binding MemberName}"/>
-                            <GridViewColumn Header="Số tiền" DisplayMemberBinding="{Binding PaymentValue}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                    <DockPanel Grid.Column="1" LastChildFill="True">
+                        <Label Content="Ngày về" DockPanel.Dock="Left"/>
+                        <DatePicker Height="25" Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    Name="DatePicker2"
+                                    Width="200"
+                                    VerticalAlignment="Top"
+                                    FirstDayOfWeek="Monday"
+                                    SelectedDateFormat="Short"                                    />
+                    </DockPanel>
+                </Grid>
+                <TextBox x:Name="JourneyDescriptionTextBox" Grid.Row="1" materialDesign:HintAssist.Hint="Mô tả chuyến đi"/>
+                <DockPanel Grid.Row="2" LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top">
+                        <DockPanel LastChildFill="True">
+                            <TextBox x:Name="paymentValueTextBox" DockPanel.Dock="Right" Width="50" materialDesign:HintAssist.Hint="Số tiền"/>
+                            <ComboBox x:Name="MemberComboBox" DockPanel.Dock="Right" Width="100">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding MemberName}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <TextBox x:Name="paymentContentTextBox" materialDesign:HintAssist.Hint="Khoản chi"/>
+                        </DockPanel>
+                        <Button x:Name="AddPaymentBtn" Click="AddPaymentBtn_Click" Content="Thêm khoản chi" DockPanel.Dock="Bottom"/>
+                    </StackPanel>
+                    <ListView x:Name="PaymentListView">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Khoản chi" DisplayMemberBinding="{Binding PaymentContent}"/>
+                                <GridViewColumn Header="Người chi" DisplayMemberBinding="{Binding MemberName}"/>
+                                <GridViewColumn Header="Số tiền" DisplayMemberBinding="{Binding PaymentValue}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DockPanel>
+
             </Grid>
         </Grid>
     </Grid>

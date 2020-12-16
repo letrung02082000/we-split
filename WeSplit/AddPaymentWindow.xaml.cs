@@ -23,6 +23,8 @@ namespace WeSplit
     {
         public ObservableCollection<MemberModel> JourneyMemberList { get; set; }
         public JourneyModel JourneyInfo;
+        public delegate void UpdatePayment();
+        public event UpdatePayment EventHandler;
         public AddPaymentWindow(JourneyModel journeyInfo)
         {
             InitializeComponent();
@@ -34,5 +36,18 @@ namespace WeSplit
             JourneyMemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadJourneyMember(JourneyInfo.JourneyId));
             MemberComboBox.ItemsSource = JourneyMemberList;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int paymentValue = 0;
+            int.TryParse(PaymentValueTextBox.Text, out paymentValue);
+            MemberModel member = MemberComboBox.SelectedItem as MemberModel;
+            PaymentModel payment = new PaymentModel { JourneyId = JourneyInfo.JourneyId, MemberId = member.MemberId, PaymentContent = PaymentContentTextBox.Text, PaymentValue = paymentValue };
+            DatabaseAccess.SavePayment(payment);
+            EventHandler();
+            this.Close();
+        }
+
+        
     }
 }

@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace WeSplit
 {
@@ -27,6 +29,7 @@ namespace WeSplit
         public ObservableCollection<PaymentModel> PaymentList { get; set; }
         public ObservableCollection<RouteModel> RouteList { get; set; }
         public ObservableCollection<DestinationModel> DestinationList { get; set; }
+        public ObservableCollection<PaymentPerMemberModel> PaymentPerMemberList { get; set; }
         public DetailJourneyPage(JourneyModel journeyInfo)
         {
             InitializeComponent();
@@ -59,6 +62,28 @@ namespace WeSplit
             //Get journey destination list
             DestinationList = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadJourneyDestination(JourneyInfo.JourneyId));
             DestinationListView.ItemsSource = DestinationList;
+
+            PaymentPerMemberList = new ObservableCollection<PaymentPerMemberModel>(DatabaseAccess.LoadPaymentPerMember(JourneyInfo.JourneyId));
+
+            PaymentChart.Series = new SeriesCollection();
+            MemberChart.Series = new SeriesCollection();
+
+            UpdateCharts();
+        }
+
+        private void UpdateCharts()
+        {
+            foreach (var payment in PaymentList)
+            {
+                PieSeries pieSeries = new PieSeries { Title = payment.PaymentContent, Values = new ChartValues<int> { payment.PaymentValue }};
+                PaymentChart.Series.Add(pieSeries);
+            }
+
+            foreach (var paymentPerMember in PaymentPerMemberList)
+            {
+                PieSeries pieSeries = new PieSeries { Title = paymentPerMember.MemberName, Values = new ChartValues<int> { paymentPerMember.PaymentValue } };
+                MemberChart.Series.Add(pieSeries);
+            }
         }
 
         private void GoBackBtn_Click(object sender, RoutedEventArgs e)
@@ -83,24 +108,61 @@ namespace WeSplit
             JourneyLabelStackPanel.Visibility = Visibility.Visible;
             EditLabelStackPanel.Visibility = Visibility.Hidden;
             JourneyLabel.Content = EditLabelTextBox.Text;
+            JourneyInfo.JourneyName = EditLabelTextBox.Text;
+            DatabaseAccess.UpdateJourney(JourneyInfo);
         }
 
         private void AddRouteBtn_Click(object sender, RoutedEventArgs e)
         {
-            AddRouteStackPanel.Visibility = Visibility.Visible;
-            AddRouteBtn.Visibility = Visibility.Hidden;
+            RouteModel route = new RouteModel { JourneyId = JourneyInfo.JourneyId, RouteContent = AddRouteTextBox.Text };
+            DatabaseAccess.SaveRoute(route);
+            RouteList = new ObservableCollection<RouteModel>(DatabaseAccess.LoadRoute(JourneyInfo.JourneyId));
+            RouteListView.ItemsSource = RouteList;
+            AddRouteTextBox.Clear();
         }
 
         private void AddPaymentBtn_Click(object sender, RoutedEventArgs e)
         {
             AddPaymentWindow addPaymentWindow = new AddPaymentWindow(JourneyInfo);
+            addPaymentWindow.EventHandler += UpdatePayment;
             addPaymentWindow.Show();
         }
 
         private void AddMemberBtn_Click(object sender, RoutedEventArgs e)
         {
             AddMemberWindow addMemberWindow = new AddMemberWindow();
+            addMemberWindow.EventHandler += AddMemberHandler;
             addMemberWindow.Show();
+        }
+
+        private void UpdatePayment()
+        {
+            PaymentList = new ObservableCollection<PaymentModel>(DatabaseAccess.LoadPayment(JourneyInfo.JourneyId));
+            PaymentListView.ItemsSource = PaymentList;
+
+            PaymentPerMemberList = new ObservableCollection<PaymentPerMemberModel>(DatabaseAccess.LoadPaymentPerMember(JourneyInfo.JourneyId));
+
+            PaymentChart.Series = new SeriesCollection();
+            MemberChart.Series = new SeriesCollection();
+
+            UpdateCharts();
+        }
+
+        private void AddMemberHandler(MemberModel member)
+        {
+            if (member.OldMember)
+            {
+                DatabaseAccess.SaveJourneyMember(JourneyInfo.JourneyId, member.MemberId);
+                
+            }
+            else
+            {
+                member.MemberId = DatabaseAccess.SaveMember(member);
+                DatabaseAccess.SaveJourneyMember(JourneyInfo.JourneyId, member.MemberId);
+            }
+
+            JourneyMemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadJourneyMember(JourneyInfo.JourneyId));
+            JourneyMemberListView.ItemsSource = JourneyMemberList;
         }
     }
 }

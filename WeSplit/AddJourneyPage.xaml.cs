@@ -28,6 +28,7 @@ namespace WeSplit
         public ObservableCollection<DestinationModel> DestinationList { get; set; }
         public ObservableCollection<MemberModel> MemberList { get; set; }
         public ObservableCollection<PaymentModel> PaymentList { get; set; }
+        public JourneyModel JourneyInfo { get; set; }
         public AddJourneyPage()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace WeSplit
             JourneyDestinationList = new ObservableCollection<JourneyDestinationModel>();
             MemberList = new ObservableCollection<MemberModel>();
             PaymentList = new ObservableCollection<PaymentModel>();
+            JourneyInfo = new JourneyModel();
         }
 
         private void AddJourneyPage_Loaded(object sender, RoutedEventArgs e)
@@ -43,6 +45,7 @@ namespace WeSplit
             MemberListView.ItemsSource = MemberList;
             MemberComboBox.ItemsSource = MemberList;
             PaymentListView.ItemsSource = PaymentList;
+            
         }
 
         private void AddMemberBtn_Click(object sender, RoutedEventArgs e)
@@ -62,13 +65,14 @@ namespace WeSplit
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
 
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
                 string extName = filePath.Split('.').Last();
                 string fileName = $"{Guid.NewGuid()}.{extName}";
+                JourneyInfo.CoverImage = fileName;
                 string newFilePath = directory + $"\\{fileName}";
                 File.Copy(filePath, newFilePath, true);
                 JourneyCoverImage.Source = new BitmapImage(new Uri(newFilePath));
@@ -84,7 +88,51 @@ namespace WeSplit
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
+            //add journey info
+            string journeyName = JourneyNameTextBox.Text.Trim();
+            string startDate = DatePicker1.SelectedDate.ToString().Split(' ').First();
+            string endDate = DatePicker2.SelectedDate.ToString().Split(' ').First();
+            string jouneyDescription = JourneyDescriptionTextBox.Text.Trim();
 
+            if (journeyName != "" && startDate != "" && endDate != "")
+            {
+                JourneyInfo.JourneyName = journeyName;
+                JourneyInfo.JourneyDescription = jouneyDescription;
+                JourneyInfo.StartDate = startDate;
+                JourneyInfo.EndDate = endDate;
+                JourneyInfo.JourneyId = DatabaseAccess.SaveJourney(JourneyInfo);
+            }
+
+            //add member
+            foreach(MemberModel member in MemberList)
+            {
+                if (!member.OldMember)
+                {
+                    member.MemberId = DatabaseAccess.SaveMember(member);
+                }
+
+                DatabaseAccess.SaveJourneyMember(JourneyInfo.JourneyId, member.MemberId);
+            }
+
+            //add journey destination
+            foreach(DestinationModel destination in DestinationList)
+            {
+                if (!destination.OldDestination)
+                {
+                    destination.DesId = DatabaseAccess.SaveDestination(destination);
+                }
+
+                JourneyDestinationModel journeyDestination = new JourneyDestinationModel { JourneyId = JourneyInfo.JourneyId, DesId = destination.DesId };
+                DatabaseAccess.SaveJourneyDestination(journeyDestination);
+            }
+
+            //add payment
+            foreach(PaymentModel payment in PaymentList)
+            {
+                payment.MemberId = payment.paymentMember.MemberId;
+                payment.JourneyId = JourneyInfo.JourneyId;
+                DatabaseAccess.SavePayment(payment);
+            }
         }
 
         private void AddDestinationBtn_Click(object sender, RoutedEventArgs e)
@@ -109,7 +157,7 @@ namespace WeSplit
             int paymentValue;
             MemberModel member = MemberComboBox.SelectedItem as MemberModel;
             int.TryParse(paymentValueTextBox.Text, out paymentValue);
-            PaymentModel payment = new PaymentModel { PaymentContent=paymentContentTextBox.Text, MemberName=member.MemberName , PaymentValue=paymentValue};
+            PaymentModel payment = new PaymentModel {MemberId=member.MemberId, PaymentContent=paymentContentTextBox.Text, MemberName=member.MemberName , PaymentValue=paymentValue, paymentMember=member};
             PaymentList.Add(payment);
         }
     }

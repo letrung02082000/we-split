@@ -15,9 +15,15 @@
         FontFamily="Segoe UI"
         Loaded="AddPaymentWindow_Loaded"
         Title="AddPaymentWindow" Height="450" Width="800">
-    <Grid>
+    <DockPanel>
+        
+        <Button Content="Thêm" DockPanel.Dock="Bottom" Width="150" Margin="0,0,0,10" Click="Button_Click"/>
         <StackPanel>
-            <TextBox Width="350" materialDesign:HintAssist.Hint="Khoản chi"/>
+            <Label Content="Khoản chi" FontWeight="Bold" FontSize="15"/>
+            <TextBox x:Name="PaymentContentTextBox"/>
+            <Label Content="Số tiền" FontWeight="Bold" FontSize="15"/>
+            <TextBox x:Name="PaymentValueTextBox"/>
+            <Label Content="Người chi" FontWeight="Bold" FontSize="15"/>
             <ComboBox x:Name="MemberComboBox">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -25,8 +31,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBox Width="350" materialDesign:HintAssist.Hint="Số tiền"/>
-            <Button Content="Thêm"/>
+            
+
         </StackPanel>
-    </Grid>
+    </DockPanel>
 </Window>

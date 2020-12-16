@@ -24,15 +24,23 @@ namespace WeSplit
         public delegate void AddDestination(DestinationModel destination);
         public event AddDestination EventHandler;
         public ObservableCollection<DestinationModel> DestinationList { get; set; }
+        public ObservableCollection<string> Province { get; set; }
         public AddDestinationWindow()
         {
             InitializeComponent();
+            Province = new ObservableCollection<string>()
+            {
+                "Gia Lai",
+                "TP HCM",
+                "Hà Nội"
+            };
         }
 
         private void AddDestinationWindow_Loaded(object sender, RoutedEventArgs e)
         {
             DestinationList = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadDestination());
             DestinationListView.ItemsSource = DestinationList;
+            ProvinceComboBox.ItemsSource = Province;
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -44,7 +52,7 @@ namespace WeSplit
         {
             if(EventHandler != null)
             {
-                DestinationModel destination = new DestinationModel { DesName = DesNameTextBox.Text, Province = ProvinceComboBox.Text };
+                DestinationModel destination = new DestinationModel { DesName = DesNameTextBox.Text, Province = ProvinceComboBox.Text, OldDestination=false };
                 EventHandler(destination);
                 this.Close();
             }
@@ -53,6 +61,7 @@ namespace WeSplit
         private void DestinationListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DestinationModel selectedDestination = DestinationList[DestinationListView.SelectedIndex];
+            selectedDestination.OldDestination = true;
             if (EventHandler != null)
             {
                 EventHandler(selectedDestination);

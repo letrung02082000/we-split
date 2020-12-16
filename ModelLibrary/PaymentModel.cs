@@ -14,5 +14,6 @@ namespace ModelLibrary
         public string PaymentContent { get; set; }
         public int PaymentValue { get; set; }
         public string MemberName { get; set; }
+        public MemberModel paymentMember { get; set; }
     }
 }

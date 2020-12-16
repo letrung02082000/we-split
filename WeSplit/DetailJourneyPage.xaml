@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WeSplit"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -17,91 +18,111 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Loaded="DetailJourneyPage_Loaded"
       Title="DetailJourneyPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="203*"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <Button Width="75" Content="Quay lại" Click="GoBackBtn_Click"  Margin="5" Padding="0" DockPanel.Dock="Left"/>
+            <!--<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <materialDesign:PackIcon Kind="ClockStart" Width="35" Height="21" Margin="5"/>
+                <TextBlock Text="{Binding StartDate}" Margin="0,0,15,0" Padding="0" FontSize="15" VerticalAlignment="Center"/>
 
-        <Grid Grid.Row="0">
-            <StackPanel>
-                <Button Content="Go back" Click="GoBackBtn_Click"/>
-            </StackPanel>
-        </Grid>
+                <materialDesign:PackIcon Kind="ClockEnd" Width="35" Height="21" Margin="5"/>
+                <TextBlock Text="{Binding EndDate}" Margin="0,0,15,0" Padding="0" FontSize="15" VerticalAlignment="Center"/>
 
-        <Grid Grid.Row="1">
+            </StackPanel>-->
+            <Grid>
+                <DockPanel Name="JourneyLabelStackPanel">
+                    <Button Click="EditJourneyNameBtn_Click" DockPanel.Dock="Right" Padding="9" Margin="5">
+                        <materialDesign:PackIcon Kind="Edit" Padding="0" Margin="0"/>
+                    </Button>
+                    <Label Name="JourneyLabel" VerticalAlignment="Center" Height="30" Content="{Binding JourneyName}" HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"/>
+
+                </DockPanel>
+                <DockPanel Name="EditLabelStackPanel" Visibility="Hidden" LastChildFill="True">
+                    <Button Content="OK" Click="ConfirmJourneyNameBtn_Click" DockPanel.Dock="Right" Padding="9" Margin="5"/>
+                    <TextBox x:Name="EditLabelTextBox" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0" Padding="2" FontSize="15"/>
+
+                </DockPanel>
+            </Grid>
+
+        </DockPanel>
+
+
+        <Grid>
             <Grid.ColumnDefinitions>
 
-                <ColumnDefinition Width="238*"/>
-                <ColumnDefinition Width="251*"/>
-                <ColumnDefinition Width="311*"/>
+                <ColumnDefinition Width="119*"/>
+                <ColumnDefinition Width="122*"/>
+                <ColumnDefinition Width="159*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
+            <Grid Grid.Column="0" Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="18*"/>
-                    <RowDefinition Height="96*"/>
-                    <RowDefinition Height="89*"/>
+                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="186*"/>
+                    <RowDefinition Height="175*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <StackPanel Orientation="Horizontal" Name="JourneyLabelStackPanel">
-                        <Label Name="JourneyLabel" Height="30" DockPanel.Dock="Top" Content="{Binding JourneyName}"/>
-                        <Button Content="Edit" Click="EditJourneyNameBtn_Click"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Name="EditLabelStackPanel" Visibility="Hidden">
-                        <TextBox x:Name="EditLabelTextBox" Width="200"/>
-                        <Button Content="OK" Click="ConfirmJourneyNameBtn_Click"/>
-                    </StackPanel>
-                </Grid>
 
-                <DockPanel Grid.Row="1" LastChildFill="True">
+                <Image x:Name="JourneyImage" Grid.Row="1" Margin="0,10,0,10"/>
 
-                    <Button DockPanel.Dock="Left" Width="30">
-                        <materialDesign:PackIcon Kind="NavigateBefore"/>
+                <DockPanel Grid.Row="0" LastChildFill="False">
+                    <Button DockPanel.Dock="Left" Width="30" Padding="0" Margin="5,0,0,0">
+                        <materialDesign:PackIcon Kind="NavigateBefore" Padding="0" Margin="0"/>
                     </Button>
-                    <Button DockPanel.Dock="Right" Width="30">
+                    <Button DockPanel.Dock="Left" Width="30" Margin="10,0,0,0" Padding="0">
                         <materialDesign:PackIcon Kind="NavigateNext"/>
                     </Button>
-                    <Image/>
+
+                    <Button DockPanel.Dock="Right" Margin="0,0,10,0" Padding="5">
+                        <materialDesign:PackIcon Kind="AddToPhotos" />
+                    </Button>
+
+
                 </DockPanel>
 
                 <DockPanel Grid.Row="2" LastChildFill="True">
-                    <Button x:Name="AddMemberBtn" Content="Thêm thành viên" DockPanel.Dock="Bottom" Click="AddMemberBtn_Click"/>
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                        <Button x:Name="AddMemberBtn" Click="AddMemberBtn_Click" Margin="0,0,10,0" Padding="5" DockPanel.Dock="Right">
+                            <materialDesign:PackIcon Kind="PeopleAdd" Width="25"/>
+                        </Button>
+                        <Label Content="Thành viên" Padding="10" FontWeight="Bold" FontSize="15" Margin="0" HorizontalAlignment="Center"/>
+                    </DockPanel>
+
                     <ListView x:Name="JourneyMemberListView">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Tên thành viên" DisplayMemberBinding="{Binding MemberName}"/>
-                                <GridViewColumn Header="SĐT" DisplayMemberBinding="{Binding MemberTel}"/>
-                                <GridViewColumn Header="Địa chỉ" DisplayMemberBinding="{Binding MemberAddr}"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding MemberName}"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding MemberTel}"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding MemberAddr}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
                 </DockPanel>
             </Grid>
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="99*"/>
                     <RowDefinition Height="104*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="55*"/>
-                        <RowDefinition Height="120*"/>
-                        <RowDefinition Height="23*"/>
+                        <RowDefinition Height="115*"/>
+                        <RowDefinition Height="79*"/>
+
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock>Ngày đi:</TextBlock>
-                            <TextBlock Text="{Binding StartDate}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock>Ngày về:</TextBlock>
-                            <TextBlock Text="{Binding EndDate}"/>
-                        </StackPanel>
+                    <DockPanel Grid.Row="0">
+                        <DockPanel DockPanel.Dock="Top" VerticalAlignment="Top">
+                            <materialDesign:PackIcon Kind="MapMarker" />
+                            <Label Content="Điểm đến" FontWeight="Bold"/>
+                            <!--<Button DockPanel.Dock="Right" Padding="5" Height="Auto">
+                                <materialDesign:PackIcon Kind="Edit" Padding="0" Margin="0"/>
+                            </Button>-->
+                        </DockPanel>
+
                         <ListView x:Name="DestinationListView">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"/>
+                                    <StackPanel/>
                                 </ItemsPanelTemplate>
+
                             </ListView.ItemsPanel>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -109,9 +130,21 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </StackPanel>
-                    <Grid Grid.Row="1">
+                    </DockPanel>
+                    <DockPanel Grid.Row="1">
                         <!--<ScrollViewer>-->
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                            <materialDesign:PackIcon Kind="Routes" VerticalAlignment="Center" />
+                            <Label Content="Lộ trình" FontWeight="Bold" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+                        </DockPanel>
+                        <DockPanel x:Name="AddRouteStackPanel" DockPanel.Dock="Bottom">
+
+                            <Button DockPanel.Dock="Right" x:Name="AddRouteBtn" Click="AddRouteBtn_Click" Margin="0" Padding="9" Height="Auto">
+                                <materialDesign:PackIcon Kind="MilestoneAdd"/>
+                            </Button>
+                            <TextBox x:Name="AddRouteTextBox" Padding="2" Margin="0,0,10,0"/>
+                        </DockPanel>
                         <ListView x:Name="RouteListView">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -125,12 +158,10 @@
                             </ListView.ItemTemplate>
                         </ListView>
                         <!--</ScrollViewer>-->
-                    </Grid>
-                    <Button Grid.Row="2" x:Name="AddRouteBtn" Content="Thêm lộ trình" Click="AddRouteBtn_Click" Height="Auto"/>
-                    <StackPanel x:Name="AddRouteStackPanel" Grid.Row="2" Visibility="Hidden" Orientation="Horizontal">
-                        <TextBox Width="150"/>
-                        <Button Content="Thêm"/>
-                    </StackPanel>
+
+                    </DockPanel>
+
+
                 </Grid>
                 <DockPanel Grid.Row="1" LastChildFill="True">
                     <Button x:Name="AddPaymentBtn" Content="Thêm khoản chi" DockPanel.Dock="Bottom" Click="AddPaymentBtn_Click"/>
@@ -146,8 +177,23 @@
                 </DockPanel>
             </Grid>
             <Grid Grid.Column="2">
-
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="33*"/>
+                    <RowDefinition Height="35*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" x:Name="PieChart">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <lvc:PieChart x:Name="PaymentChart" LegendLocation="Bottom" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <lvc:PieChart x:Name="MemberChart" LegendLocation="Bottom"/>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </DockPanel>
 </Page>

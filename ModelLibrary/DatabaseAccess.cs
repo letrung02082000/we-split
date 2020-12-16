@@ -12,15 +12,6 @@ namespace ModelLibrary
 {
     public class DatabaseAccess
     {
-        public static string GetLastInsertRowId(string table)
-        {
-            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
-            {
-                var output = connection.Query<string>($"SELECT DISTINCT last_insert_rowid() FROM {table}");
-                return output.ToList().First();
-            }
-        }
-
         //CRUD Member
         public static List<MemberModel> LoadMember()
         {
@@ -31,11 +22,12 @@ namespace ModelLibrary
             }
         }
 
-        public static void SaveMember(MemberModel member)
+        public static int SaveMember(MemberModel member)
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                connection.Execute("insert into member(memberName, memberTel, memberAddr) values (@MemberName, @MemberTel, @MemberAddr)", member);
+                int output = connection.ExecuteScalar<int>("insert into member(memberName, memberTel, memberAddr) values (@MemberName, @MemberTel, @MemberAddr); SELECT last_insert_rowid()", member);
+                return output;
             }
         }
 
@@ -61,7 +53,7 @@ namespace ModelLibrary
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("INSERT INTO destination(desName, province) VALUES(@DesName, @Province)", destination);
+                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province) VALUES(@DesName, @Province); SELECT last_insert_rowid()", destination);
                 return output;
             }
         }
@@ -83,11 +75,12 @@ namespace ModelLibrary
             }
         }
 
-        public static void SaveJourneyDestination(JourneyDestinationModel destination)
+        public static int SaveJourneyDestination(JourneyDestinationModel destination)
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("INSERT INTO journey_destination(journeyId, desId) VALUES(@JourneyId, @DesId)", destination);
+                int output = connection.ExecuteScalar<int>("INSERT INTO journey_destination(journeyId, desId) VALUES(@JourneyId, @DesId)", destination);
+                return output;
             }
         }
 
@@ -101,11 +94,12 @@ namespace ModelLibrary
             }
         }
 
-        public static void SaveJourney(JourneyModel journey)
+        public static int SaveJourney(JourneyModel journey)
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("INSERT INTO journey(journeyName, journeyDescription, startDate, endDate, coverImage) VALUES(@JourneyName, @JourneyDescription, @StartDate, @EndDate, @CoverImage)", journey);
+                var output = connection.ExecuteScalar<int>("INSERT INTO journey(journeyName, journeyDescription, startDate, endDate, coverImage) VALUES(@JourneyName, @JourneyDescription, @StartDate, @EndDate, @CoverImage); SELECT last_insert_rowid()", journey);
+                return output;
             }
         }
 
@@ -127,6 +121,15 @@ namespace ModelLibrary
             }
         }
 
+        public static int SaveJourneyMember(int journeyId, int memberId)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                int output = connection.ExecuteScalar<int>("INSERT INTO journey_member(journeyId, memberId) VALUES(@JourneyId, @MemberId); SELECT last_insert_rowid()", new { JourneyId = journeyId, MemberId = memberId});
+                return output;
+            }
+        }
+
         //CRUD Payment
         public static List<PaymentModel> LoadPayment(int journeyId)
         {
@@ -134,6 +137,15 @@ namespace ModelLibrary
             {
                 var output = connection.Query<PaymentModel>($"select payment.journeyId, payment.memberId, payment.paymentContent, payment.paymentValue, member.memberName from payment join member on payment.memberId = member.memberId where payment.journeyId = {journeyId}", new DynamicParameters());
                 return output.ToList();
+            }
+        }
+
+        public static int SavePayment(PaymentModel payment)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                int output = connection.ExecuteScalar<int>("INSERT INTO payment(memberId, journeyId, paymentContent, paymentValue) VALUES(@MemberId, @JourneyId, @PaymentContent, @PaymentValue)", payment);
+                return output;
             }
         }
 
@@ -147,11 +159,22 @@ namespace ModelLibrary
             }
         }
 
-        public static void SaveRoute(RouteModel route)
+        public static int SaveRoute(RouteModel route)
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("INSERT INTO route(journeyId, routeContent) VALUES (@JourneyId, @RouteContent)", route);
+                int output = connection.ExecuteScalar<int>("INSERT INTO route(journeyId, routeContent) VALUES (@JourneyId, @RouteContent); SELECT last_insert_rowid()", route);
+                return output;
+            }
+        }
+
+        //Get payment sum per member
+        public static List<PaymentPerMemberModel> LoadPaymentPerMember(int journeyId)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Query<PaymentPerMemberModel>($"SELECT payment.memberId, member.memberName, sum(payment.paymentValue) AS paymentValue FROM member JOIN payment ON member.memberId = payment.memberId WHERE payment.journeyId = {journeyId} GROUP BY payment.memberId, member.memberName", new DynamicParameters());
+                return output.ToList();
             }
         }
 

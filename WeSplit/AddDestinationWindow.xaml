@@ -41,7 +41,8 @@
                 <Label Content="Tên địa danh"/>
                 <TextBox x:Name="DesNameTextBox"/>
                 <Label Content="Tỉnh thành"/>
-                <ComboBox x:Name="ProvinceComboBox"/>
+                <ComboBox x:Name="ProvinceComboBox" IsEditable="True">
+                </ComboBox>
             </StackPanel>
             </DockPanel>
         </Grid>

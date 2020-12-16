@@ -38,6 +38,7 @@ namespace WeSplit
         private void MemberListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             MemberModel member = MemberList[MemberListView.SelectedIndex];
+            member.OldMember = true;
             if (EventHandler != null)
             {
                 EventHandler(member);
@@ -54,7 +55,7 @@ namespace WeSplit
         {
             if (EventHandler != null)
             {
-                MemberModel member = new MemberModel { MemberName = NameTextBox.Text, MemberTel = TelTextBox.Text, MemberAddr = AddrTextBox.Text };
+                MemberModel member = new MemberModel { MemberName = NameTextBox.Text, MemberTel = TelTextBox.Text, MemberAddr = AddrTextBox.Text, OldMember=false };
                 EventHandler(member);
                 this.Close();
             }
