@@ -187,11 +187,28 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
-                        <lvc:PieChart x:Name="PaymentChart" LegendLocation="Bottom" />
+                        <lvc:PieChart x:Name="PaymentChart" LegendLocation="Bottom"/>
                     </Grid>
                     <Grid Grid.Column="1">
                         <lvc:PieChart x:Name="MemberChart" LegendLocation="Bottom"/>
                     </Grid>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <ListView x:Name="AveragePaymentListView">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Label Content="{Binding MemberName}"/>
+                                <TextBlock Text="{Binding PaymentValue}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </Grid>
         </Grid>

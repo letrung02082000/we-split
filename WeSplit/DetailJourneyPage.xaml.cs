@@ -30,6 +30,8 @@ namespace WeSplit
         public ObservableCollection<RouteModel> RouteList { get; set; }
         public ObservableCollection<DestinationModel> DestinationList { get; set; }
         public ObservableCollection<PaymentPerMemberModel> PaymentPerMemberList { get; set; }
+        public ObservableCollection<AveragePaymentModel> AveragePaymentList { get; set; }
+        public double AveragePayment { get; set; }
         public DetailJourneyPage(JourneyModel journeyInfo)
         {
             InitializeComponent();
@@ -64,6 +66,27 @@ namespace WeSplit
             DestinationListView.ItemsSource = DestinationList;
 
             PaymentPerMemberList = new ObservableCollection<PaymentPerMemberModel>(DatabaseAccess.LoadPaymentPerMember(JourneyInfo.JourneyId));
+
+            //Calculate average payment
+            AveragePaymentList = new ObservableCollection<AveragePaymentModel>();
+            
+            double paymentSum = 0;
+
+            foreach(PaymentPerMemberModel paymentPerMember in PaymentPerMemberList)
+            {
+                paymentSum += paymentPerMember.PaymentValue;
+            }
+
+            AveragePayment = paymentSum / PaymentPerMemberList.Count;
+
+            foreach (var paymentPerMember in PaymentPerMemberList)
+            {
+                double averageValue = Math.Round(paymentPerMember.PaymentValue - AveragePayment, 3);
+                AveragePaymentModel averagePaymentPerMember = new AveragePaymentModel { MemberId = paymentPerMember.MemberId, MemberName = paymentPerMember.MemberName, PaymentValue = averageValue };
+                AveragePaymentList.Add(averagePaymentPerMember);
+            }
+
+            AveragePaymentListView.ItemsSource = AveragePaymentList;
 
             PaymentChart.Series = new SeriesCollection();
             MemberChart.Series = new SeriesCollection();

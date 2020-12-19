@@ -85,6 +85,16 @@ namespace ModelLibrary
         }
 
         //CRUD Journey
+
+        public static List<SuperMegaJourneyInfo> LoadSuperMegaJourney()
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Query<SuperMegaJourneyInfo>("SELECT journey.*, member.memberId, member.memberName, member.memberName2, destination.desId, destination.desName, destination.desName2 FROM journey JOIN journey_member ON journey.journeyId = journey_member.journeyId JOIN member ON journey_member.memberId = member.memberId JOIN journey_destination ON journey.journeyId = journey_destination.journeyId JOIN destination on journey_destination.desId = destination.desId", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+
         public static List<JourneyModel> LoadJourney()
         {
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))

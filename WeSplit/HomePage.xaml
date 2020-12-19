@@ -76,7 +76,18 @@
                     <ColumnDefinition Width="427*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel Grid.Column="0" LastChildFill="True">
+                    <DockPanel DockPanel.Dock="Top">
+                        <Button x:Name="ClearSearchBtn" Click="ClearSearchBtn_Click" DockPanel.Dock="Right" Content="Clear"/>
+                        <ComboBox x:Name="FilterComboBox" SelectedIndex="0" DockPanel.Dock="Right">
+                            <ComboBoxItem Content="Tất cả"/>
+                            <ComboBoxItem Content="Tên chuyến đi"/>
+                            <ComboBoxItem Content="Tên địa danh"/>
+                            <ComboBoxItem Content="Tên thành viên"/>
+                        </ComboBox>
+                        <TextBox x:Name="SearchTextBox" TextChanged="SearchTextBox_TextChanged"/>
+                    </DockPanel>
                     <Button x:Name="AddJourneyBtn" Content="Thêm chuyến đi" DockPanel.Dock="Bottom" Click="AddJourneyBtn_Click"/>
+                        
                     <ListView x:Name="JourneyListView" SelectionChanged="JourneyListView_SelectionChanged">
                         <ListView.View>
                             <GridView>

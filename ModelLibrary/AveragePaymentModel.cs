@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary
 {
-    public class MemberModel
+    public class AveragePaymentModel
     {
         public int MemberId { get; set; }
         public string MemberName { get; set; }
-        public string MemberTel { get; set; }
-        public string MemberAddr { get; set; }
-        public string MemberName2 { get; set; }
-        public bool OldMember { get; set; } = false;
+        public double PaymentValue { get; set; }
     }
 }
