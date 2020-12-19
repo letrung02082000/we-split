@@ -13,6 +13,16 @@ namespace ModelLibrary
 {
     public class DatabaseAccess
     {
+        //Read Setting
+        public static List<MemberModel> LoadSetting()
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Query<MemberModel>("select * from member", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+
         //CRUD Member
         public static List<MemberModel> LoadMember()
         {
@@ -57,7 +67,7 @@ namespace ModelLibrary
             destination.DesName2 = ConvertToUnSign(destination.DesName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province, desName2) VALUES(@DesName, @Province, @DesName2); SELECT last_insert_rowid()", destination);
+                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province, desName2, desImage) VALUES(@DesName, @Province, @DesName2, @DesImage); SELECT last_insert_rowid()", destination);
                 return output;
             }
         }

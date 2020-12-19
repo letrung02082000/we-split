@@ -36,6 +36,7 @@ namespace WeSplit
 
         private void AllJourneyBtn_Click(object sender, RoutedEventArgs e)
         {
+
             //Set button color
             AllJourneyBorder.Background = Brushes.Black;
             AllJourneyBtn.Foreground = Brushes.White;
@@ -43,10 +44,24 @@ namespace WeSplit
             NextJourneyBtn.Foreground = Brushes.Black;
             BeforeJourneyBorder.Background = Brushes.White;
             BeforeJourneyBtn.Foreground = Brushes.Black;
+
+            journeyList = new ObservableCollection<JourneyModel>(DatabaseAccess.LoadJourney());
+
+            foreach (var journey in journeyList)
+            {
+                string[] startDateArray = journey.StartDate.Trim().Split('/');
+                journey.StartDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+
+                string[] endDateArray = journey.EndDate.Trim().Split('/');
+                journey.EndDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+            }
+
+            JourneyListView.ItemsSource = journeyList;
         }
 
         private void NextJourneyBtn_Click(object sender, RoutedEventArgs e)
         {
+
             //Set button color
             AllJourneyBorder.Background = Brushes.White;
             AllJourneyBtn.Foreground = Brushes.Black;
@@ -54,6 +69,21 @@ namespace WeSplit
             NextJourneyBtn.Foreground = Brushes.White;
             BeforeJourneyBorder.Background = Brushes.White;
             BeforeJourneyBtn.Foreground = Brushes.Black;
+
+            journeyList = new ObservableCollection<JourneyModel>(DatabaseAccess.LoadJourney());
+
+            foreach (var journey in journeyList)
+            {
+                string[] startDateArray = journey.StartDate.Trim().Split('/');
+                journey.StartDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+
+                string[] endDateArray = journey.EndDate.Trim().Split('/');
+                journey.EndDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+            }
+
+            //filter next journey
+            journeyList = new ObservableCollection<JourneyModel>(journeyList.Where(journey => journey.StartDateTime >= DateTime.Now).OrderBy(d=>d.StartDateTime).ToList());
+            JourneyListView.ItemsSource = journeyList;
         }
 
         private void BeforeJourneyBtn_Click(object sender, RoutedEventArgs e)
@@ -65,6 +95,21 @@ namespace WeSplit
             NextJourneyBtn.Foreground = Brushes.Black;
             BeforeJourneyBorder.Background = Brushes.Black;
             BeforeJourneyBtn.Foreground = Brushes.White;
+
+            journeyList = new ObservableCollection<JourneyModel>(DatabaseAccess.LoadJourney());
+
+            foreach (var journey in journeyList)
+            {
+                string[] startDateArray = journey.StartDate.Trim().Split('/');
+                journey.StartDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+
+                string[] endDateArray = journey.EndDate.Trim().Split('/');
+                journey.EndDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+            }
+
+            //filter before journey
+            journeyList = new ObservableCollection<JourneyModel>(journeyList.Where(journey => journey.EndDateTime < DateTime.Now).OrderBy(d => d.StartDateTime).ToList());
+            JourneyListView.ItemsSource = journeyList;
         }
 
         private void JourneyListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -76,6 +121,9 @@ namespace WeSplit
             }
             else
             {
+                string imageUrl = DatabaseAccess.LoadJourneyImage(journeyList[JourneyListView.SelectedIndex].JourneyId)[0];
+                imageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}\\image\\{imageUrl}";
+                JourneyImage.Source = new BitmapImage(new Uri(imageUrl, UriKind.Absolute));
                 this.DataContext = journeyList[JourneyListView.SelectedIndex];
             }
         }
@@ -96,11 +144,22 @@ namespace WeSplit
             //Set button color
             AllJourneyBorder.Background = Brushes.Black;
             AllJourneyBtn.Foreground = Brushes.White;
+
             //Load journey list
             journeyList = new ObservableCollection<JourneyModel>(DatabaseAccess.LoadJourney());
             JourneyListView.ItemsSource = journeyList;
             this.DataContext = journeyList[InitIndex];
             JourneyListView.SelectedIndex = InitIndex;
+
+            //Convert datetime
+            foreach(var journey in journeyList)
+            {
+                string[] startDateArray = journey.StartDate.Trim().Split('/');
+                journey.StartDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+
+                string[] endDateArray = journey.EndDate.Trim().Split('/');
+                journey.EndDateTime = new DateTime(int.Parse(startDateArray[2]), int.Parse(startDateArray[0]), int.Parse(startDateArray[1]));
+            }
 
             //Load Member list
             MemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadMember());

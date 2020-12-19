@@ -90,8 +90,8 @@
                     <Button Padding="10,0,0,0" FontSize="17"
                             Background="{x:Null}" BorderBrush="{x:Null}" Width="198" Height="60" Click="SearchBtn_Click">
                         <StackPanel Orientation="Horizontal" Height="57" Width="184">
-                            <materialDesign:PackIcon Kind="Search" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                            <TextBlock Text="Tìm kiếm" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                            <materialDesign:PackIcon Kind="AddThick" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="Thêm mới" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
                         </StackPanel>
                     </Button>
 

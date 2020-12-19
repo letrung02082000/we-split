@@ -13,5 +13,6 @@ namespace ModelLibrary
         public string Province { get; set; }
         public string DesName2 { get; set; }
         public bool OldDestination { get; set; } = false;
+        public string DesImage { get; set; }
     }
 }

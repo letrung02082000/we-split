@@ -15,5 +15,7 @@ namespace ModelLibrary
         public string EndDate { get; set; }
         public string CoverImage { get; set; }
         public string JourneyName2 { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
     }
 }

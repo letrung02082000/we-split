@@ -100,7 +100,7 @@
                 <Grid Grid.Column="1">
                     <StackPanel>
                         <Label Content="{Binding JourneyName}"/>
-                        <Image Height="350"/>
+                        <Image Height="350" x:Name="JourneyImage"/>
                         <TextBlock Text="{Binding JourneyDescription}"/>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Ngày đi</TextBlock>

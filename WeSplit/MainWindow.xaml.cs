@@ -70,6 +70,8 @@ namespace WeSplit
             GridContent.Children.Clear();
             ChangeMenuPointer(3);
             ListViewMenu.SelectedIndex = 3;
+            AddJourneyScreen addJourneyScreen = new AddJourneyScreen();
+            GridContent.Children.Add(addJourneyScreen);
         }
 
         private void Setting_Click(object sender, RoutedEventArgs e)
@@ -77,6 +79,8 @@ namespace WeSplit
             GridContent.Children.Clear();
             ChangeMenuPointer(5);
             ListViewMenu.SelectedIndex = 5;
+            SettingScreen settingScreen = new SettingScreen();
+            GridContent.Children.Add(settingScreen);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
