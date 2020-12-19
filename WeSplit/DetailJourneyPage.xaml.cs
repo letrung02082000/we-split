@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
+using System.IO;
+using Microsoft.Win32;
 
 namespace WeSplit
 {
@@ -29,9 +31,11 @@ namespace WeSplit
         public ObservableCollection<PaymentModel> PaymentList { get; set; }
         public ObservableCollection<RouteModel> RouteList { get; set; }
         public ObservableCollection<DestinationModel> DestinationList { get; set; }
+        public ObservableCollection<string> JourneyImageList { get; set; }
         public ObservableCollection<PaymentPerMemberModel> PaymentPerMemberList { get; set; }
         public ObservableCollection<AveragePaymentModel> AveragePaymentList { get; set; }
         public double AveragePayment { get; set; }
+        public int CurrentImageIndex { get; set; }
         public DetailJourneyPage(JourneyModel journeyInfo)
         {
             InitializeComponent();
@@ -60,6 +64,16 @@ namespace WeSplit
             //Get route list
             RouteList = new ObservableCollection<RouteModel>(DatabaseAccess.LoadRoute(JourneyInfo.JourneyId));
             RouteListView.ItemsSource = RouteList;
+
+            //Get journey image list
+            JourneyImageList = new ObservableCollection<string>(DatabaseAccess.LoadJourneyImage(JourneyInfo.JourneyId));
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "\\image";
+
+            if(JourneyImageList[0] != null) {
+                CurrentImageIndex = 0;
+                JourneyImage.Source = new BitmapImage(new Uri($"{directory}\\{JourneyImageList[0]}"));
+                JourneyImageList = new ObservableCollection<string>(DatabaseAccess.LoadJourneyImage(JourneyInfo.JourneyId));
+            }
 
             //Get journey destination list
             DestinationList = new ObservableCollection<DestinationModel>(DatabaseAccess.LoadJourneyDestination(JourneyInfo.JourneyId));
@@ -186,6 +200,51 @@ namespace WeSplit
 
             JourneyMemberList = new ObservableCollection<MemberModel>(DatabaseAccess.LoadJourneyMember(JourneyInfo.JourneyId));
             JourneyMemberListView.ItemsSource = JourneyMemberList;
+        }
+
+        private void AddImageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "\\image";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                string extName = filePath.Split('.').Last();
+                string fileName = $"{Guid.NewGuid()}.{extName}";
+                DatabaseAccess.SaveJourneyImage(JourneyInfo.JourneyId, fileName);
+                string newFilePath = directory + $"\\{fileName}";
+                File.Copy(filePath, newFilePath, true);
+            }
+
+            JourneyImageList = new ObservableCollection<string>(DatabaseAccess.LoadJourneyImage(JourneyInfo.JourneyId));
+        }
+
+        private void NextImageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentImageIndex == JourneyImageList.Count - 1) return;
+
+            ++CurrentImageIndex;
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "\\image";
+            JourneyImage.Source = new BitmapImage(new Uri($"{directory}\\{JourneyImageList[CurrentImageIndex]}"));
+
+        }
+
+        private void BeforeImageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentImageIndex == 0) return;
+
+            --CurrentImageIndex;
+            string directory = AppDomain.CurrentDomain.BaseDirectory + "\\image";
+            JourneyImage.Source = new BitmapImage(new Uri($"{directory}\\{JourneyImageList[CurrentImageIndex]}"));
+
         }
     }
 }

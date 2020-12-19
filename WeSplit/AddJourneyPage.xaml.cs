@@ -103,6 +103,8 @@ namespace WeSplit
                 JourneyInfo.JourneyId = DatabaseAccess.SaveJourney(JourneyInfo);
             }
 
+            DatabaseAccess.SaveJourneyImage(JourneyInfo.JourneyId, JourneyInfo.CoverImage);
+
             //add member
             foreach(MemberModel member in MemberList)
             {

@@ -64,14 +64,14 @@
                 <Image x:Name="JourneyImage" Grid.Row="1" Margin="0,10,0,10"/>
 
                 <DockPanel Grid.Row="0" LastChildFill="False">
-                    <Button DockPanel.Dock="Left" Width="30" Padding="0" Margin="5,0,0,0">
+                    <Button DockPanel.Dock="Left" Width="30" Padding="0" Margin="5,0,0,0" x:Name="BeforeImageBtn" Click="BeforeImageBtn_Click">
                         <materialDesign:PackIcon Kind="NavigateBefore" Padding="0" Margin="0"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Width="30" Margin="10,0,0,0" Padding="0">
+                    <Button DockPanel.Dock="Left" Width="30" Margin="10,0,0,0" Padding="0" x:Name="NextImageBtn" Click="NextImageBtn_Click">
                         <materialDesign:PackIcon Kind="NavigateNext"/>
                     </Button>
 
-                    <Button DockPanel.Dock="Right" Margin="0,0,10,0" Padding="5">
+                    <Button DockPanel.Dock="Right" Margin="0,0,10,0" Padding="5" x:Name="AddImageBtn" Click="AddImageBtn_Click">
                         <materialDesign:PackIcon Kind="AddToPhotos" />
                     </Button>
 

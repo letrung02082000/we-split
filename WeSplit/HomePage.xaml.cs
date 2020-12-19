@@ -185,7 +185,6 @@ namespace WeSplit
                                        select new { journey.JourneyId, journey.JourneyName, journey.JourneyDescription, journey.StartDate, journey.EndDate, journey.CoverImage, journey.JourneyName2 };
                     searchResult = searchResult.Distinct();
 
-
                     resultList.Clear();
 
                     foreach (var journey in searchResult)
@@ -198,7 +197,6 @@ namespace WeSplit
                 }
                 
             }
-
 
             JourneyListView.ItemsSource = journeyList;
         }

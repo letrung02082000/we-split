@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace ModelLibrary
 {
@@ -24,18 +25,20 @@ namespace ModelLibrary
 
         public static int SaveMember(MemberModel member)
         {
+            member.MemberName2 = ConvertToUnSign(member.MemberName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                int output = connection.ExecuteScalar<int>("insert into member(memberName, memberTel, memberAddr) values (@MemberName, @MemberTel, @MemberAddr); SELECT last_insert_rowid()", member);
+                int output = connection.ExecuteScalar<int>("insert into member(memberName, memberTel, memberAddr, memberName2) values (@MemberName, @MemberTel, @MemberAddr, @MemberName2); SELECT last_insert_rowid()", member);
                 return output;
             }
         }
 
         public static void UpdateMember(MemberModel member)
         {
-            using(IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            member.MemberName2 = ConvertToUnSign(member.MemberName);
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                connection.Execute($"UPDATE member SET memberName = {member.MemberName}, memberTel = {member.MemberTel}, memberAddr = {member.MemberAddr} WHERE memberId = {member.MemberId}");
+                connection.Execute($"UPDATE member SET memberName = {member.MemberName}, memberTel = {member.MemberTel}, memberAddr = {member.MemberAddr}, memberName2 = {member.MemberName2} WHERE memberId = {member.MemberId}");
             }
         }
 
@@ -51,18 +54,20 @@ namespace ModelLibrary
 
         public static int SaveDestination(DestinationModel destination)
         {
+            destination.DesName2 = ConvertToUnSign(destination.DesName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province) VALUES(@DesName, @Province); SELECT last_insert_rowid()", destination);
+                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province, desName2) VALUES(@DesName, @Province, @DesName2); SELECT last_insert_rowid()", destination);
                 return output;
             }
         }
 
         public static void UpdateDestination(DestinationModel destination)
         {
+            destination.DesName2 = ConvertToUnSign(destination.DesName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("UPDATE destination SET desName = @DesName, province = @Province WHERE desId = @DesId", destination);
+                var output = connection.Execute("UPDATE destination SET desName = @DesName, province = @Province, desName2 = @DesName2 WHERE desId = @DesId", destination);
             }
         }
 
@@ -106,18 +111,20 @@ namespace ModelLibrary
 
         public static int SaveJourney(JourneyModel journey)
         {
+            journey.JourneyName2 = ConvertToUnSign(journey.JourneyName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.ExecuteScalar<int>("INSERT INTO journey(journeyName, journeyDescription, startDate, endDate, coverImage) VALUES(@JourneyName, @JourneyDescription, @StartDate, @EndDate, @CoverImage); SELECT last_insert_rowid()", journey);
+                var output = connection.ExecuteScalar<int>("INSERT INTO journey(journeyName, journeyDescription, startDate, endDate, coverImage, journeyName2) VALUES(@JourneyName, @JourneyDescription, @StartDate, @EndDate, @CoverImage, @JourneyName2); SELECT last_insert_rowid()", journey);
                 return output;
             }
         }
 
         public static void UpdateJourney(JourneyModel journey)
         {
+            journey.JourneyName2 = ConvertToUnSign(journey.JourneyName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                var output = connection.Execute("UPDATE journey SET journeyName = @JourneyName, journeyDescription = @JourneyDescription, startDate = @StartDate, endDate = @EndDate, coverImage = @CoverImage WHERE journeyId = @JourneyId", journey);
+                var output = connection.Execute("UPDATE journey SET journeyName = @JourneyName, journeyDescription = @JourneyDescription, startDate = @StartDate, endDate = @EndDate, coverImage = @CoverImage, journeyName2 = @JourneyName2 WHERE journeyId = @JourneyId", journey);
             }
         }
 
@@ -178,6 +185,25 @@ namespace ModelLibrary
             }
         }
 
+        //CRUD Journey Images
+        public static List<string> LoadJourneyImage(int journeyId)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = connection.Query<string>($"select imageUrl from journey_image where journey_image.journeyId = {journeyId} order by journey_image.imageId asc", new DynamicParameters());
+                return output.ToList();
+            }
+        }
+
+        public static int SaveJourneyImage(int journeyId, string fileName)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                int output = connection.ExecuteScalar<int>("INSERT INTO journey_image(journeyId, imageUrl) VALUES(@JourneyId, @ImageUrl); SELECT last_insert_rowid()", new { JourneyId = journeyId, ImageUrl = fileName });
+                return output;
+            }
+        }
+
         //Get payment sum per member
         public static List<PaymentPerMemberModel> LoadPaymentPerMember(int journeyId)
         {
@@ -191,6 +217,23 @@ namespace ModelLibrary
         private static string LoadConnectionString(string id = "default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+        }
+
+        public static string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2;
         }
     }
 }

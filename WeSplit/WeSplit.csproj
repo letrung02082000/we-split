@@ -132,7 +132,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ChartData.cs" />
     <Compile Include="DestinationScreen.xaml.cs">
       <DependentUpon>DestinationScreen.xaml</DependentUpon>
     </Compile>
