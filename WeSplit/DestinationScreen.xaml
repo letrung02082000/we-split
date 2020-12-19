@@ -17,10 +17,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="259*"/>
-            <ColumnDefinition Width="141*"/>
+            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="79*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="DestinationListView" Grid.Column="0">
+        <ListView Margin="10" x:Name="DestinationListView" Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding DesId}"/>
@@ -29,11 +29,13 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Grid.Column="1">
-            <TextBox x:Name="NameTextBox" materialDesign:HintAssist.Hint="Tên địa danh"/>
-            <TextBlock>Tỉnh thành</TextBlock>
-            <ComboBox x:Name="ProvinceComboBox" IsEditable="True"/>
-            <Button Content="Thêm địa danh" x:Name="AddDestinationBtn" Click="AddDestinationBtn_Click"/>
-        </StackPanel>
+        <DockPanel Margin="10" Grid.Column="1" LastChildFill="False">
+            <Label Margin="10" HorizontalAlignment="Center" FontSize="25" DockPanel.Dock="Top" FontWeight="Bold" Content="Thêm địa danh"/>
+            <Button DockPanel.Dock="Bottom" Content="Thêm địa danh" x:Name="AddDestinationBtn" Click="AddDestinationBtn_Click"/>
+            <TextBox FontSize="15" DockPanel.Dock="Top" x:Name="NameTextBox" materialDesign:HintAssist.Hint="Tên địa danh"/>
+            
+            <ComboBox DockPanel.Dock="Top" Margin="15" materialDesign:HintAssist.Hint="Chọn tỉnh thành" x:Name="ProvinceComboBox" IsEditable="True"/>
+            
+        </DockPanel>
     </Grid>
 </UserControl>

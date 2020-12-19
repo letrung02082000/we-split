@@ -88,6 +88,42 @@ namespace WeSplit
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (JourneyNameTextBox.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập tên chuyến đi");
+                return;
+            }
+
+            if (DatePicker1.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập ngày bắt đầu");
+                return;
+            }
+
+            if (DatePicker2.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập ngày kết thúc");
+                return;
+            }
+
+            if (JourneyDescriptionTextBox.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập mô tả chuyến đi");
+                return;
+            }
+
+            if(DestinationList.Count == 0)
+            {
+                MessageBox.Show("Vui lòng thêm địa danh");
+                return;
+            }
+
+            if (MemberList.Count == 0)
+            {
+                MessageBox.Show("Vui lòng thêm thành viên");
+                return;
+            }
+
             //add journey info
             string journeyName = JourneyNameTextBox.Text.Trim();
             string startDate = DatePicker1.SelectedDate.ToString().Split(' ').First();
@@ -103,7 +139,10 @@ namespace WeSplit
                 JourneyInfo.JourneyId = DatabaseAccess.SaveJourney(JourneyInfo);
             }
 
-            DatabaseAccess.SaveJourneyImage(JourneyInfo.JourneyId, JourneyInfo.CoverImage);
+            if(JourneyInfo.CoverImage != null)
+            {
+                DatabaseAccess.SaveJourneyImage(JourneyInfo.JourneyId, JourneyInfo.CoverImage);
+            }
 
             //add member
             foreach(MemberModel member in MemberList)
@@ -135,6 +174,9 @@ namespace WeSplit
                 payment.JourneyId = JourneyInfo.JourneyId;
                 DatabaseAccess.SavePayment(payment);
             }
+
+            MessageBox.Show("Đã thêm chuyến đi.");
+            this.NavigationService.GoBack();
         }
 
         private void AddDestinationBtn_Click(object sender, RoutedEventArgs e)
@@ -156,9 +198,34 @@ namespace WeSplit
 
         private void AddPaymentBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (paymentContentTextBox.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập nội dung khoản chi");
+                return;
+            }
+
+            if (paymentValueTextBox.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng nhập số tiền");
+                return;
+            }
+
+            if (MemberComboBox.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng chọn người chi");
+                return;
+            }
+
             int paymentValue;
+
+            if(!int.TryParse(paymentValueTextBox.Text, out paymentValue) || paymentValue < 0)
+            {
+                MessageBox.Show("Vui lòng nhập số tiền là một số nguyên dương");
+                return;
+            }
+
             MemberModel member = MemberComboBox.SelectedItem as MemberModel;
-            int.TryParse(paymentValueTextBox.Text, out paymentValue);
+            
             PaymentModel payment = new PaymentModel {MemberId=member.MemberId, PaymentContent=paymentContentTextBox.Text, MemberName=member.MemberName , PaymentValue=paymentValue, paymentMember=member};
             PaymentList.Add(payment);
         }

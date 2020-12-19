@@ -121,9 +121,18 @@ namespace WeSplit
             }
             else
             {
-                string imageUrl = DatabaseAccess.LoadJourneyImage(journeyList[JourneyListView.SelectedIndex].JourneyId)[0];
-                imageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}\\image\\{imageUrl}";
-                JourneyImage.Source = new BitmapImage(new Uri(imageUrl, UriKind.Absolute));
+                List<string> imageList = DatabaseAccess.LoadJourneyImage(journeyList[JourneyListView.SelectedIndex].JourneyId);
+                if (imageList.Count > 0)
+                {
+                    string imageUrl = imageList[0];
+                    imageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}\\image\\{imageUrl}";
+                    JourneyImage.Source = new BitmapImage(new Uri(imageUrl, UriKind.Absolute));
+                }
+                else
+                {
+                    JourneyImage.Source = null;
+                }
+
                 this.DataContext = journeyList[JourneyListView.SelectedIndex];
             }
         }
@@ -175,7 +184,8 @@ namespace WeSplit
 
         private void ClearSearchBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            SearchTextBox.Text = "";
+            FilterComboBox.SelectedIndex = 0;
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)

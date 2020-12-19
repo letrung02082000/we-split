@@ -8,9 +8,14 @@
              Loaded="UserControl_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="Splash Screen"/>
-            <CheckBox Checked="startupCheckBox_Checked" Unchecked="startupCheckBox_Unchecked" x:Name="startupCheckBox"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="62*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="25" VerticalAlignment="Center" FontWeight="Bold" Content="Cài đặt"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock FontSize="17" Text="Mở Splash Screen khi khởi động" Margin="10,0,10,0"/>
+            <CheckBox VerticalAlignment="Top" Checked="startupCheckBox_Checked" Unchecked="startupCheckBox_Unchecked" x:Name="startupCheckBox"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -13,6 +13,40 @@ namespace ModelLibrary
 {
     public class DatabaseAccess
     {
+        public static void CreateTable()
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                string query = "CREATE TABLE \"cost\" (\"costId\" INTEGER NOT NULL UNIQUE, \"costDetail\" TEXT NOT NULL, \"journeyId\" INTEGER NOT NULL, \"costValue\" INTEGER NOT NULL, FOREIGN KEY(\"journeyId\") REFERENCES \"journey\"(\"journeyId\"), PRIMARY KEY(\"costId\" AUTOINCREMENT))";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"journey\" ( \"journeyId\"	INTEGER NOT NULL UNIQUE, \"journeyName\"	TEXT NOT NULL, \"journeyDescription\"	TEXT, \"startDate\"	TEXT, \"endDate\"	TEXT, \"coverImage\"	INTEGER, \"journeyName2\"	TEXT, PRIMARY KEY(\"journeyId\" AUTOINCREMENT) )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"member\" ( \"memberId\"	INTEGER NOT NULL UNIQUE, \"memberName\"	TEXT NOT NULL, \"memberTel\"	TEXT, \"memberAddr\"	TEXT, \"memberName2\"	TEXT, PRIMARY KEY(\"memberId\" AUTOINCREMENT) )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"route\" ( \"routeId\"	INTEGER NOT NULL UNIQUE, \"journeyId\"	INTEGER NOT NULL, \"routeContent\"	TEXT NOT NULL, PRIMARY KEY(\"routeId\" AUTOINCREMENT) )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"destination\" ( \"desId\"	INTEGER NOT NULL UNIQUE, \"desName\"	TEXT NOT NULL, \"province\"	TEXT, \"desName2\"	TEXT, \"desImage\"	TEXT, \"desDescription\"	TEXT, PRIMARY KEY(\"desId\" AUTOINCREMENT) )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"payment\" ( \"paymentId\"	INTEGER NOT NULL UNIQUE, \"memberId\"	INTEGER NOT NULL, \"journeyId\"	INTEGER NOT NULL, \"paymentContent\"	TEXT NOT NULL, \"paymentValue\"	INTEGER NOT NULL, PRIMARY KEY(\"paymentId\" AUTOINCREMENT), FOREIGN KEY(\"memberId\") REFERENCES \"member\"(\"memberId\"), FOREIGN KEY(\"journeyId\") REFERENCES \"journey\"(\"journeyId\") )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"journey_destination\" ( \"journeyId\"	INTEGER NOT NULL, \"desId\"	INTEGER NOT NULL, FOREIGN KEY(\"desId\") REFERENCES \"destination\"(\"desId\"), FOREIGN KEY(\"journeyId\") REFERENCES \"journey\"(\"journeyId\"), PRIMARY KEY(\"journeyId\",\"desId\") )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"journey_image\" ( \"imageId\"	INTEGER NOT NULL UNIQUE, \"journeyId\"	INTEGER NOT NULL, \"imageUrl\"	TEXT NOT NULL, PRIMARY KEY(\"imageId\" AUTOINCREMENT) )";
+                connection.Execute(query);
+
+                query = "CREATE TABLE \"journey_member\" ( \"journeyId\"	INTEGER NOT NULL, \"memberId\"	INTEGER NOT NULL, PRIMARY KEY(\"journeyId\",\"memberId\"), FOREIGN KEY(\"journeyId\") REFERENCES \"journey\"(\"journeyId\") )";
+                connection.Execute(query);
+
+            }
+        }
+
         //Read Setting
         public static List<MemberModel> LoadSetting()
         {
@@ -67,7 +101,7 @@ namespace ModelLibrary
             destination.DesName2 = ConvertToUnSign(destination.DesName);
             using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
             {
-                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province, desName2, desImage) VALUES(@DesName, @Province, @DesName2, @DesImage); SELECT last_insert_rowid()", destination);
+                int output = connection.ExecuteScalar<int>("INSERT INTO destination(desName, province, desName2, desImage, desDescription) VALUES(@DesName, @Province, @DesName2, @DesImage, @DesDescription); SELECT last_insert_rowid()", destination);
                 return output;
             }
         }

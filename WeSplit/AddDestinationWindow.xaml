@@ -14,15 +14,16 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="Segoe UI"
         Loaded="AddDestinationWindow_Loaded"
-        Title="AddDestinationWindow" Height="450" Width="800">
+        WindowStartupLocation ="CenterScreen"
+        Title="Thêm địa danh" Height="450" Width="800">
 
     <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="241*"/>
                 <ColumnDefinition Width="155*"/>
             </Grid.ColumnDefinitions>
-            <DockPanel Grid.Column="0">
-                <Label Content="Địa danh cũ" DockPanel.Dock="Top"/>
+            <DockPanel Grid.Column="0" Margin="10">
+                <Label FontSize="15" FontWeight="Bold" Content="Địa danh cũ" DockPanel.Dock="Top"/>
                 <ListView x:Name="DestinationListView" MouseDoubleClick="DestinationListView_MouseDoubleClick">
                     <ListView.View>
                         <GridView>
@@ -32,18 +33,18 @@
                     </ListView.View>
                 </ListView>
             </DockPanel>
-            <DockPanel Grid.Column="1">
+            <DockPanel Grid.Column="1" Margin="10">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Content="Thêm" Name="ConfirmBtn" Click="ConfirmBtn_Click"/>
+                    <Button Content="Thêm" Name="ConfirmBtn" Click="ConfirmBtn_Click" Margin="0,0,25,0"/>
                     <Button Content="Huỷ" Name="CancelBtn" Click="CancelBtn_Click"/>
                 </StackPanel>
-            <StackPanel>
-                <Label Content="Tên địa danh"/>
-                <TextBox x:Name="DesNameTextBox"/>
-                <Label Content="Tỉnh thành"/>
-                <ComboBox x:Name="ProvinceComboBox" IsEditable="True">
-                </ComboBox>
-            </StackPanel>
+                <StackPanel>
+                    <Label Content="Tên địa danh" FontSize="15" FontWeight="Bold" Margin="10"/>
+                    <TextBox x:Name="DesNameTextBox" Margin="10, 0, 10, 10" Height="35"/>
+                    <Label Content="Tỉnh thành" FontSize="15" FontWeight="Bold" Margin="10"/>
+                    <ComboBox x:Name="ProvinceComboBox" IsEditable="True" SelectedIndex="0" Margin="15, 10, 15, 10">
+                    </ComboBox>
+                </StackPanel>
             </DockPanel>
         </Grid>
 </Window>

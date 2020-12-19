@@ -14,7 +14,7 @@ namespace WeSplit
         {
             string directory = value.ToString();
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            return $"{baseDir}\\{directory}";
+            return $"{baseDir}\\image\\{directory}";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -30,12 +30,12 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                <Image Source="{Binding Image, Converter={StaticResource directoryConverter}}"/>
+                <Image Source="{Binding DesImage, Converter={StaticResource directoryConverter}}"/>
             </Grid>
 
             <Grid Grid.Row="2">
                 <ScrollViewer Margin="10" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <TextBlock TextAlignment="Center" FontSize="13" TextWrapping="Wrap" Text="{Binding Description}"/>
+                    <TextBlock TextAlignment="Center" FontSize="13" TextWrapping="Wrap" Text="{Binding DesDescription}"/>
                 </ScrollViewer>
             </Grid>
 

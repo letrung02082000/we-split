@@ -14,5 +14,6 @@ namespace ModelLibrary
         public string DesName2 { get; set; }
         public bool OldDestination { get; set; } = false;
         public string DesImage { get; set; }
+        public string DesDescription { get; set; }
     }
 }

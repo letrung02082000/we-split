@@ -30,9 +30,29 @@ namespace WeSplit
             InitializeComponent();
             Province = new ObservableCollection<string>()
             {
+                "An Giang",
+                "Bà Rịa-Vũng Tàu",
+                "Bạc Liêu",
+                "Bắc Kạn",
+                "Bắc Giang",
+                "Bắc Ninh",
+                "Bến Tre",
+                "Bình Dương",
+                "Bình Định",
+                "Bình Phước",
+                "Bình Thuận",
+                "Cà Mau",
+                "Cao Bằng",
+                "Cần Thơ",
+                "Đà Nẵng",
+                "Đắk Lắk",
+                "Đắk Nông",
+                "Điện Biên",
+                "Đồng Nai",
+                "Đồng Tháp",
                 "Gia Lai",
                 "TP HCM",
-                "Hà Nội"
+                "Hà Nội",
             };
         }
 
@@ -50,9 +70,15 @@ namespace WeSplit
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(EventHandler != null)
+            if(DesNameTextBox.Text.Trim() == "" || ProvinceComboBox.Text.Trim() == "")
             {
-                DestinationModel destination = new DestinationModel { DesName = DesNameTextBox.Text, Province = ProvinceComboBox.Text, OldDestination=false };
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin địa danh.");
+                return;
+            }
+
+            if (EventHandler != null)
+            {
+                DestinationModel destination = new DestinationModel { DesName = DesNameTextBox.Text, Province = ProvinceComboBox.Text, OldDestination = false };
                 EventHandler(destination);
                 this.Close();
             }
