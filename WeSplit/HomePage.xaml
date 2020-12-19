@@ -78,7 +78,9 @@
                 <DockPanel Grid.Column="0" LastChildFill="True" Margin="0,0,10,0">
                     <DockPanel DockPanel.Dock="Top">
                         <materialDesign:PackIcon Kind="Search" DockPanel.Dock="Left" VerticalAlignment="Center" Height="35" Width="25"/>
-                        <Button Margin="15,0,10,0" x:Name="ClearSearchBtn" Click="ClearSearchBtn_Click" DockPanel.Dock="Right" Content="Xoá"/>
+                        <Button Margin="15,0,10,0" x:Name="ClearSearchBtn" Click="ClearSearchBtn_Click" DockPanel.Dock="Right">
+                            <materialDesign:PackIcon Kind="RemoveCircle"/>
+                        </Button>
                         <ComboBox x:Name="FilterComboBox" SelectedIndex="0" DockPanel.Dock="Right" Margin="10,0,10,0" Width="100">
                             <ComboBoxItem Content="Tất cả"/>
                             <ComboBoxItem Content="Tên chuyến đi"/>

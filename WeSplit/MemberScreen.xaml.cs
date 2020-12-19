@@ -37,6 +37,11 @@ namespace WeSplit
         private void AddMemberBtn_Click(object sender, RoutedEventArgs e)
         {
             //Handle exception
+            if (MemberNameTxt.Text.Trim() == "" || MemberTelTxt.Text.Trim() == "" || MemberAddrTxt.Text.Trim() == "")
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ các thông tin thành viên.");
+                return;
+            }
 
             //Save member
             MemberModel member = new MemberModel { MemberName = MemberNameTxt.Text, MemberTel = MemberTelTxt.Text, MemberAddr = MemberAddrTxt.Text };

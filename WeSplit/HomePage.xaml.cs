@@ -140,9 +140,10 @@ namespace WeSplit
 
         private void DetailJourneyBtn_Click(object sender, RoutedEventArgs e)
         {
-            //JourneyDetailScreen journeyDetailScreen = new JourneyDetailScreen(journeyList[JourneyListView.SelectedIndex]);
-            //DetailJourneyPage detailJourneyPage = new DetailJourneyPage(journeyList[JourneyListView.SelectedIndex]);
-            this.NavigationService.Navigate(new DetailJourneyPage(journeyList[JourneyListView.SelectedIndex]));
+            if(journeyList.Count > 0)
+            {
+                this.NavigationService.Navigate(new DetailJourneyPage(journeyList[JourneyListView.SelectedIndex]));
+            }
         }
 
         private void HomePage_Loaded(object sender, RoutedEventArgs e)
@@ -157,7 +158,7 @@ namespace WeSplit
             //Load journey list
             journeyList = new ObservableCollection<JourneyModel>(DatabaseAccess.LoadJourney());
             JourneyListView.ItemsSource = journeyList;
-            this.DataContext = journeyList[InitIndex];
+            //this.DataContext = journeyList[InitIndex];
             JourneyListView.SelectedIndex = InitIndex;
 
             //Convert datetime

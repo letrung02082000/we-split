@@ -63,6 +63,8 @@ namespace WeSplit
             GridContent.Children.Clear();
             ChangeMenuPointer(4);
             ListViewMenu.SelectedIndex = 4;
+            AboutScreen aboutScreen = new AboutScreen();
+            GridContent.Children.Add(aboutScreen);
         }
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)

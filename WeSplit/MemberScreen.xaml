@@ -17,10 +17,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="437*"/>
+            <ColumnDefinition Width="363*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="MemberListView" Grid.Column="0">
+        <ListView Margin="10" x:Name="MemberListView" Grid.Column="0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding MemberId}"/>
@@ -30,14 +30,16 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Column="1">
-            <StackPanel>
-                <TextBox x:Name="MemberNameTxt" Width="250" materialDesign:HintAssist.Hint="Tên thành viên"/>
-                <TextBox x:Name="MemberTelTxt" Width="250" materialDesign:HintAssist.Hint="Số điện thoại"/>
-                <TextBox x:Name="MemberAddrTxt" Width="250" materialDesign:HintAssist.Hint="Địa chỉ"/>
+        <Grid Grid.Column="1" Margin="10">
+            <DockPanel LastChildFill="False">
+                <Label Margin="10" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Content="Thêm thành viên" DockPanel.Dock="Top"/>
                 <Button Content="Thêm thành viên" Name="AddMemberBtn" Click="AddMemberBtn_Click" DockPanel.Dock="Bottom"/>
-            </StackPanel>
-            
+                <TextBox Margin="10" DockPanel.Dock="Top" x:Name="MemberNameTxt" materialDesign:HintAssist.Hint="Tên thành viên"/>
+                <TextBox Margin="10" DockPanel.Dock="Top" x:Name="MemberTelTxt" materialDesign:HintAssist.Hint="Số điện thoại"/>
+                <TextBox Margin="10" DockPanel.Dock="Top" x:Name="MemberAddrTxt" materialDesign:HintAssist.Hint="Địa chỉ"/>
+
+            </DockPanel>
+
         </Grid>
     </Grid>
 

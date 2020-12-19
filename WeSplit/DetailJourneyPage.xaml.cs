@@ -69,7 +69,7 @@ namespace WeSplit
             JourneyImageList = new ObservableCollection<string>(DatabaseAccess.LoadJourneyImage(JourneyInfo.JourneyId));
             string directory = AppDomain.CurrentDomain.BaseDirectory + "\\image";
 
-            if(JourneyImageList[0] != null) {
+            if(JourneyImageList.Count > 0) {
                 CurrentImageIndex = 0;
                 JourneyImage.Source = new BitmapImage(new Uri($"{directory}\\{JourneyImageList[0]}"));
                 JourneyImageList = new ObservableCollection<string>(DatabaseAccess.LoadJourneyImage(JourneyInfo.JourneyId));
