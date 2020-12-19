@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -84,6 +85,26 @@ namespace WeSplit
             //filter next journey
             journeyList = new ObservableCollection<JourneyModel>(journeyList.Where(journey => journey.StartDateTime >= DateTime.Now).OrderBy(d=>d.StartDateTime).ToList());
             JourneyListView.ItemsSource = journeyList;
+
+            if(journeyList.Count > 0)
+            {
+                JourneyListView.SelectedIndex = 0;
+            }
+
+            if (JourneyListView.SelectedIndex >= 0)
+            {
+                List<string> imageList = DatabaseAccess.LoadJourneyImage(journeyList[JourneyListView.SelectedIndex].JourneyId);
+                if (imageList.Count > 0)
+                {
+                    string imageUrl = imageList[0];
+                    imageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}\\image\\{imageUrl}";
+                    JourneyImage.Source = new BitmapImage(new Uri(imageUrl, UriKind.Absolute));
+                }
+                else
+                {
+                    JourneyImage.Source = null;
+                }
+            }
         }
 
         private void BeforeJourneyBtn_Click(object sender, RoutedEventArgs e)
@@ -110,6 +131,26 @@ namespace WeSplit
             //filter before journey
             journeyList = new ObservableCollection<JourneyModel>(journeyList.Where(journey => journey.EndDateTime < DateTime.Now).OrderBy(d => d.StartDateTime).ToList());
             JourneyListView.ItemsSource = journeyList;
+
+            if (journeyList.Count > 0)
+            {
+                JourneyListView.SelectedIndex = 0;
+            }
+
+            if (JourneyListView.SelectedIndex >= 0)
+            {
+                List<string> imageList = DatabaseAccess.LoadJourneyImage(journeyList[JourneyListView.SelectedIndex].JourneyId);
+                if (imageList.Count > 0)
+                {
+                    string imageUrl = imageList[0];
+                    imageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}\\image\\{imageUrl}";
+                    JourneyImage.Source = new BitmapImage(new Uri(imageUrl, UriKind.Absolute));
+                }
+                else
+                {
+                    JourneyImage.Source = null;
+                }
+            }
         }
 
         private void JourneyListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -133,14 +174,18 @@ namespace WeSplit
                     JourneyImage.Source = null;
                 }
 
-                this.DataContext = journeyList[JourneyListView.SelectedIndex];
+                if(journeyList.Count > 0)
+                {
+                    this.DataContext = journeyList[JourneyListView.SelectedIndex];
+                }
+                
             }
         }
             
 
         private void DetailJourneyBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(journeyList.Count > 0)
+            if(JourneyListView.SelectedIndex >= 0)
             {
                 this.NavigationService.Navigate(new DetailJourneyPage(journeyList[JourneyListView.SelectedIndex]));
             }
@@ -191,7 +236,8 @@ namespace WeSplit
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = (sender as TextBox).Text;
+            string searchText = (sender as TextBox).Text.Trim();
+            searchText = ConvertToUnSign(searchText);
             List<JourneyModel> resultList = new List<JourneyModel>();
 
             if (searchText.Trim() == "")
@@ -269,6 +315,23 @@ namespace WeSplit
             }
 
             JourneyListView.ItemsSource = journeyList;
+        }
+
+        public static string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2.ToLower();
         }
     }
 }

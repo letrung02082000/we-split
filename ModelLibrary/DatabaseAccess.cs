@@ -277,7 +277,7 @@ namespace ModelLibrary
             {
                 str2 = str2.Remove(str2.IndexOf("?"), 1);
             }
-            return str2;
+            return str2.ToLower();
         }
     }
 }

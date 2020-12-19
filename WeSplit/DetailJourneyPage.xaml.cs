@@ -35,6 +35,7 @@ namespace WeSplit
         public ObservableCollection<PaymentPerMemberModel> PaymentPerMemberList { get; set; }
         public ObservableCollection<AveragePaymentModel> AveragePaymentList { get; set; }
         public double AveragePayment { get; set; }
+        public double RestMemberPayment { get; set; }
         public int CurrentImageIndex { get; set; }
         public DetailJourneyPage(JourneyModel journeyInfo)
         {
@@ -82,16 +83,26 @@ namespace WeSplit
             PaymentPerMemberList = new ObservableCollection<PaymentPerMemberModel>(DatabaseAccess.LoadPaymentPerMember(JourneyInfo.JourneyId));
 
             //Calculate average payment
+            CalculateAveragePayment();
+
+            PaymentChart.Series = new SeriesCollection();
+            MemberChart.Series = new SeriesCollection();
+
+            UpdateCharts();
+        }
+
+        private void CalculateAveragePayment()
+        {
             AveragePaymentList = new ObservableCollection<AveragePaymentModel>();
-            
+
             double paymentSum = 0;
 
-            foreach(PaymentPerMemberModel paymentPerMember in PaymentPerMemberList)
+            foreach (PaymentPerMemberModel paymentPerMember in PaymentPerMemberList)
             {
                 paymentSum += paymentPerMember.PaymentValue;
             }
 
-            AveragePayment = paymentSum / PaymentPerMemberList.Count;
+            AveragePayment = paymentSum / JourneyMemberList.Count;
 
             foreach (var paymentPerMember in PaymentPerMemberList)
             {
@@ -100,12 +111,10 @@ namespace WeSplit
                 AveragePaymentList.Add(averagePaymentPerMember);
             }
 
+            RestMemberPayment = -AveragePayment;
+            RestMemberPaymentTextBlock.Text = RestMemberPayment.ToString();
+
             AveragePaymentListView.ItemsSource = AveragePaymentList;
-
-            PaymentChart.Series = new SeriesCollection();
-            MemberChart.Series = new SeriesCollection();
-
-            UpdateCharts();
         }
 
         private void UpdateCharts()
@@ -182,6 +191,7 @@ namespace WeSplit
             PaymentChart.Series = new SeriesCollection();
             MemberChart.Series = new SeriesCollection();
 
+            CalculateAveragePayment();
             UpdateCharts();
         }
 

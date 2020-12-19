@@ -193,22 +193,38 @@
                         <lvc:PieChart x:Name="MemberChart" LegendLocation="Bottom"/>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="1">
-                    <ListView x:Name="AveragePaymentListView">
+                <Grid Grid.Row="1" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="53*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <ListView x:Name="AveragePaymentListView" Grid.Row="0">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel/>
+                                <StackPanel Orientation="Vertical"/>
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <Label Content="{Binding MemberName}"/>
-                                <TextBlock Text="{Binding PaymentValue}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label VerticalAlignment="Center" Content="{Binding MemberName}"/>
+                                        <TextBlock VerticalAlignment="Center" Text=": "/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding PaymentValue}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="10,0,0,0" Text="Các thành viên còn lại (chưa trả trước): "/>
+                            <TextBlock x:Name="RestMemberPaymentTextBlock"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Row="1">
+                        <TextBlock Text="*Số dương: Nhận lại"/>
+                        <TextBlock Text="*Số âm: Trả thêm"/>
+                    </StackPanel>
+                    
                 </Grid>
             </Grid>
         </Grid>
